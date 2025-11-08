@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ff9ff3">
+    <title>For My Sweet Slyy 💕</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background gradient animation -->
+    <div class="gradient-bg"></div>
+
+    <!-- Floating hearts container -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- Sparkle rain container -->
+    <div class="sparkle-rain" id="sparkleRain"></div>
+
+    <!-- Touch ripple container -->
+    <div class="ripple-container" id="rippleContainer"></div>
+
+    <!-- Main content -->
+    <main class="container">
+        <!-- Hero Greeting Section -->
+        <section class="hero-section">
+            <h1 class="greeting">
+                How are you my<br>
+                <span class="pet-name">honeybunsugarplumplumpumpkinpieza lemonsweetheartlovey?</span> 💕
+            </h1>
+            <div class="subtitle">For my beautiful Jerg Qweensly Benedicto Flores</div>
+            <div class="heart-divider">💖 💗 💕 💝 💘</div>
+        </section>
+
+        <!-- Love Letter Section -->
+        <section class="letter-section">
+            <div class="letter-container">
+                <div class="letter-header">
+                    <h2>Dear Slyy,</h2>
+                </div>
+                <div class="letter-content">
+                    <p>You Are the sweetest, cutest, prettiest Girl I've Ever Met, I'm So excited to meet you in January in person and give you a hug 😭, Since I missed so much today I made this for you 😚, I loveeee Uuu😘 mwah!</p>
+                </div>
+                <div class="letter-footer">
+                    <div class="xoxo">XOXO 💋</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 100 Reasons Section -->
+        <section class="reasons-section">
+            <h2 class="section-title">100 Reasons Why I Adore You 💕</h2>
+            <div class="reasons-counter">
+                <span id="reasonsCount">0</span> of 100 reasons discovered
+            </div>
+            <div class="reasons-container" id="reasonsContainer">
+                <!-- Reasons will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Mystery Box Section -->
+        <section class="mystery-section">
+            <div class="mystery-box" id="mysteryBox">
+                <div class="box-lid"></div>
+                <div class="box-body">
+                    <div class="question-mark">?</div>
+                    <div class="box-hint">Tap me for a surprise! 💝</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wedding Ring Reveal (Hidden by default) -->
+        <div class="ring-reveal" id="ringReveal">
+            <div class="ring-container">
+                <div class="wedding-ring">💍</div>
+                <div class="countdown" id="countdown">3</div>
+                <div class="ring-message">Oops it's not for Now</div>
+            </div>
+        </div>
+
+        <!-- Photo Gallery Section -->
+        <section class="gallery-section">
+            <h2 class="section-title">Our Beautiful Moments 📸</h2>
+            <div class="gallery-container">
+                <div class="film-strip" id="filmStrip">
+                    <!-- Images will be dynamically loaded here -->
+                    <div class="photo-placeholder">
+                        <div class="photo-text">Upload your photos to assets folder!<br>Name them img1.jpg, img2.jpg, etc.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Floating Love Messages -->
+        <div class="floating-messages" id="floatingMessages"></div>
+
+        <!-- Surprise Kiss Container -->
+        <div class="surprise-kisses" id="surpriseKisses"></div>
+
+        <!-- Love Bomb Button (Hidden, appears randomly) -->
+        <button class="love-bomb" id="loveBomb" style="display: none;">
+            💕 Love Bomb! 💕
+        </button>
+    </main>
+
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="./assets/song.mp3" type="audio/mpeg">
+        Your browser doesn't support audio playback.
+    </audio>
+
+    <!-- Music Controls (shown on mobile) -->
+    <div class="music-controls" id="musicControls">
+        <button class="music-btn" id="musicBtn">🎵 Play Music</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
