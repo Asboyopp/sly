@@ -701,8 +701,10 @@ body {
     }
 
     .pet-name {
-        font-size: 1.4rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 1.1rem;
+        padding: 0.6rem 0.8rem;
+        max-width: 85vw;
+        line-height: 1.3;
     }
 
     .letter-container {
