@@ -701,3 +701,648 @@ setInterval(() => {
         }
     });
 }, 10000);
+
+// Heart Trail Effect - follows cursor/touch
+function initHeartTrailEffect() {
+    let mouseTimer;
+
+    document.addEventListener('mousemove', function(e) {
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(() => {
+            if (Math.random() < 0.3) { // 30% chance
+                createTrailHeart(e.clientX, e.clientY);
+            }
+        }, 100);
+    });
+
+    document.addEventListener('touchmove', function(e) {
+        clearTimeout(mouseTimer);
+        const touch = e.touches[0];
+        mouseTimer = setTimeout(() => {
+            if (Math.random() < 0.3) {
+                createTrailHeart(touch.clientX, touch.clientY);
+            }
+        }, 100);
+    });
+}
+
+function createTrailHeart(x, y) {
+    const heart = document.createElement('div');
+    heart.textContent = '💕';
+    heart.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        font-size: 20px;
+        pointer-events: none;
+        animation: trailHeart 2s ease-out forwards;
+        z-index: 50;
+    `;
+
+    // Add trail animation
+    if (!document.querySelector('style[data-trail]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-trail', 'true');
+        style.textContent = `
+            @keyframes trailHeart {
+                0% {
+                    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: translate(-50%, -150%) scale(0.3) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+}
+
+// Random Heart Explosions
+function initRandomHeartExplosions() {
+    setInterval(() => {
+        if (Math.random() < 0.2) { // 20% chance every 5 seconds
+            createRandomHeartExplosion();
+        }
+    }, 5000);
+}
+
+function createRandomHeartExplosion() {
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    const hearts = ['💕', '💖', '💗', '💝', '💘', '💓', '💞'];
+
+    for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                font-size: ${Math.random() * 20 + 15}px;
+                pointer-events: none;
+                animation: randomExplosion 1.5s ease-out forwards;
+                z-index: 100;
+            `;
+
+            const angle = (Math.PI * 2 * i) / 12;
+            const velocity = Math.random() * 150 + 50;
+            heart.style.setProperty('--dx', Math.cos(angle) * velocity + 'px');
+            heart.style.setProperty('--dy', Math.sin(angle) * velocity + 'px');
+
+            // Add random explosion animation
+            if (!document.querySelector('style[data-random-explosion]')) {
+                const style = document.createElement('style');
+                style.setAttribute('data-random-explosion', 'true');
+                style.textContent = `
+                    @keyframes randomExplosion {
+                        0% {
+                            transform: translate(-50%, -50%) scale(0);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.5);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1500);
+        }, i * 50);
+    }
+}
+
+// Love Meter
+function initLoveMeter() {
+    const loveMeter = document.createElement('div');
+    loveMeter.id = 'loveMeter';
+    loveMeter.innerHTML = `
+        <div class="love-meter-container">
+            <div class="love-meter-label">Love Level: </div>
+            <div class="love-meter-bar">
+                <div class="love-meter-fill" id="loveMeterFill"></div>
+            </div>
+            <div class="love-meter-percent" id="loveMeterPercent">∞%</div>
+        </div>
+    `;
+    loveMeter.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 1rem;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        border: 2px solid #ff9ff3;
+        z-index: 400;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.5s ease;
+    `;
+
+    document.body.appendChild(loveMeter);
+
+    // Add love meter styles
+    if (!document.querySelector('style[data-love-meter]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-love-meter', 'true');
+        style.textContent = `
+            .love-meter-container {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+                color: #ff6b9d;
+            }
+            .love-meter-bar {
+                width: 100px;
+                height: 10px;
+                background: rgba(255, 107, 157, 0.2);
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .love-meter-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #ff6b9d, #ff9ff3);
+                width: 100%;
+                animation: lovePulse 2s ease-in-out infinite;
+            }
+            @keyframes lovePulse {
+                0%, 100% { transform: scaleX(1); }
+                50% { transform: scaleX(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Show love meter after 10 seconds
+    setTimeout(() => {
+        loveMeter.style.opacity = '1';
+        loveMeter.style.transform = 'translateX(0)';
+    }, 10000);
+
+    // Update love meter randomly
+    setInterval(() => {
+        const fill = document.getElementById('loveMeterFill');
+        const percent = document.getElementById('loveMeterPercent');
+        const loveLevel = Math.floor(Math.random() * 30 + 70); // 70-100%
+        fill.style.width = loveLevel + '%';
+        percent.textContent = loveLevel + '%';
+    }, 3000);
+}
+
+// Surprise Elements
+function initSurpriseElements() {
+    // Floating gift boxes
+    scheduleFloatingGiftBox();
+
+    // Random love confetti
+    scheduleLoveConfetti();
+
+    // Surprise messages in console
+    setTimeout(() => {
+        console.log('%c💕 You found the secret! 💕', 'font-size: 20px; color: #ff6b9d; font-weight: bold;');
+        console.log('%cSlyy, you are absolutely amazing! 🌟', 'font-size: 16px; color: #ff9ff3;');
+    }, 15000);
+}
+
+function scheduleFloatingGiftBox() {
+    setInterval(() => {
+        if (Math.random() < 0.3) {
+            createFloatingGiftBox();
+        }
+    }, 20000); // Every 20 seconds
+}
+
+function createFloatingGiftBox() {
+    const gift = document.createElement('div');
+    gift.textContent = '🎁';
+    gift.style.cssText = `
+        position: fixed;
+        left: -50px;
+        top: ${Math.random() * 70 + 10}%;
+        font-size: 30px;
+        cursor: pointer;
+        animation: floatGift 15s linear forwards;
+        z-index: 150;
+    `;
+
+    // Add floating gift animation
+    if (!document.querySelector('style[data-float-gift]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-float-gift', 'true');
+        style.textContent = `
+            @keyframes floatGift {
+                0% {
+                    transform: translateX(0) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateX(calc(100vw + 100px)) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    gift.addEventListener('click', function() {
+        createMiniHeartBurst(this);
+        this.remove();
+    });
+
+    document.body.appendChild(gift);
+    setTimeout(() => gift.remove(), 15000);
+}
+
+function scheduleLoveConfetti() {
+    setInterval(() => {
+        if (Math.random() < 0.4) {
+            createLoveConfetti();
+        }
+    }, 8000);
+}
+
+function createLoveConfetti() {
+    const colors = ['#ff6b9d', '#ff9ff3', '#feca57', '#48dbfb', '#ee5a6f'];
+    const emojis = ['💕', '💖', '💗', '💝', '💘', '✨', '🌟', '💫'];
+
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            confetti.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * 100}%;
+                top: -30px;
+                font-size: ${Math.random() * 15 + 10}px;
+                color: ${colors[Math.floor(Math.random() * colors.length)]};
+                pointer-events: none;
+                animation: confettiFall ${Math.random() * 3 + 2}s linear forwards;
+                z-index: 80;
+            `;
+
+            // Add confetti fall animation
+            if (!document.querySelector('style[data-confetti]')) {
+                const style = document.createElement('style');
+                style.setAttribute('data-confetti', 'true');
+                style.textContent = `
+                    @keyframes confettiFall {
+                        0% {
+                            transform: translateY(0) rotate(0deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateY(100vh) rotate(720deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 5000);
+        }, i * 100);
+    }
+}
+
+function createMiniHeartBurst(element) {
+    const rect = element.getBoundingClientRect();
+    const hearts = ['💕', '💖', '💗'];
+
+    for (let i = 0; i < 8; i++) {
+        const heart = document.createElement('div');
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.cssText = `
+            position: fixed;
+            left: ${rect.left + rect.width / 2}px;
+            top: ${rect.top + rect.height / 2}px;
+            font-size: ${Math.random() * 15 + 10}px;
+            pointer-events: none;
+            animation: miniBurst 1s ease-out forwards;
+            z-index: 200;
+        `;
+
+        const angle = (Math.PI * 2 * i) / 8;
+        const velocity = Math.random() * 100 + 50;
+        heart.style.setProperty('--mx', Math.cos(angle) * velocity + 'px');
+        heart.style.setProperty('--my', Math.sin(angle) * velocity + 'px');
+
+        // Add mini burst animation
+        if (!document.querySelector('style[data-mini-burst]')) {
+            const style = document.createElement('style');
+            style.setAttribute('data-mini-burst', 'true');
+            style.textContent = `
+                @keyframes miniBurst {
+                    0% {
+                        transform: translate(-50%, -50%) scale(0);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my))) scale(0.5);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+    }
+}
+
+// Infinite Scroll Love
+function initInfiniteScrollLove() {
+    let scrollTimeout;
+    window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            if (Math.random() < 0.3) {
+                createScrollHeart();
+            }
+        }, 100);
+    });
+}
+
+function createScrollHeart() {
+    const heart = document.createElement('div');
+    heart.textContent = '💕';
+    heart.style.cssText = `
+        position: fixed;
+        right: 20px;
+        top: ${Math.random() * 60 + 20}%;
+        font-size: 25px;
+        pointer-events: none;
+        animation: scrollHeart 2s ease-out forwards;
+        z-index: 90;
+    `;
+
+    // Add scroll heart animation
+    if (!document.querySelector('style[data-scroll-heart]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-scroll-heart', 'true');
+        style.textContent = `
+            @keyframes scrollHeart {
+                0% {
+                    transform: translateX(0) scale(0);
+                    opacity: 0;
+                }
+                50% {
+                    transform: translateX(-20px) scale(1.2);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateX(-100px) scale(0.8);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+}
+
+// Touch Gestures
+function initTouchGestures() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchend', function(e) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Swipe up - create heart rain
+        if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < -50) {
+            createHeartRain();
+        }
+
+        // Swipe down - create heart fountain
+        if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 50) {
+            createHeartFountain(touchEndX, touchEndY);
+        }
+
+        // Swipe right - create heart trail
+        if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 50) {
+            createHeartTrail(touchEndY);
+        }
+
+        // Swipe left - create heart spiral
+        if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX < -50) {
+            createHeartSpiral(touchEndX, touchEndY);
+        }
+    });
+}
+
+function createHeartRain() {
+    const hearts = ['💕', '💖', '💗', '💝', '💘'];
+
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * 100}%;
+                top: -30px;
+                font-size: ${Math.random() * 20 + 15}px;
+                pointer-events: none;
+                animation: heartRain 2s linear forwards;
+                z-index: 200;
+            `;
+
+            // Add heart rain animation
+            if (!document.querySelector('style[data-heart-rain]')) {
+                const style = document.createElement('style');
+                style.setAttribute('data-heart-rain', 'true');
+                style.textContent = `
+                    @keyframes heartRain {
+                        0% {
+                            transform: translateY(0) rotate(0deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateY(100vh) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }, i * 50);
+    }
+}
+
+function createHeartFountain(x, y) {
+    const hearts = ['💕', '💖', '💗', '💝', '💘'];
+
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                font-size: ${Math.random() * 15 + 10}px;
+                pointer-events: none;
+                animation: fountain 1.5s ease-out forwards;
+                z-index: 200;
+            `;
+
+            const angle = Math.PI + (Math.random() - 0.5) * Math.PI / 2;
+            const velocity = Math.random() * 150 + 100;
+            heart.style.setProperty('--fx', Math.cos(angle) * velocity + 'px');
+            heart.style.setProperty('--fy', Math.sin(angle) * velocity + 'px');
+
+            // Add fountain animation
+            if (!document.querySelector('style[data-fountain]')) {
+                const style = document.createElement('style');
+                style.setAttribute('data-fountain', 'true');
+                style.textContent = `
+                    @keyframes fountain {
+                        0% {
+                            transform: translate(-50%, -50%) scale(0);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(calc(-50% + var(--fx)), calc(-50% + var(--fy))) scale(0.5);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1500);
+        }, i * 30);
+    }
+}
+
+function createHeartTrail(y) {
+    const hearts = ['💕', '💖', '💗'];
+
+    for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.cssText = `
+                position: fixed;
+                left: -30px;
+                top: ${y + (Math.random() - 0.5) * 100}px;
+                font-size: ${Math.random() * 15 + 10}px;
+                pointer-events: none;
+                animation: trailMove 2s linear forwards;
+                z-index: 150;
+            `;
+
+            // Add trail move animation
+            if (!document.querySelector('style[data-trail-move]')) {
+                const style = document.createElement('style');
+                style.setAttribute('data-trail-move', 'true');
+                style.textContent = `
+                    @keyframes trailMove {
+                        0% {
+                            transform: translateX(0) scale(0);
+                            opacity: 0;
+                        }
+                        10% {
+                            transform: translateX(20px) scale(1);
+                            opacity: 1;
+                        }
+                        90% {
+                            transform: translateX(calc(100vw + 50px)) scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateX(calc(100vw + 100px)) scale(0);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }, i * 100);
+    }
+}
+
+function createHeartSpiral(x, y) {
+    const hearts = ['💕', '💖', '💗', '💝'];
+    let angle = 0;
+    let radius = 0;
+
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                font-size: ${Math.random() * 15 + 10}px;
+                pointer-events: none;
+                animation: spiral 3s ease-out forwards;
+                z-index: 200;
+            `;
+
+            angle += Math.PI / 4;
+            radius += 10;
+            heart.style.setProperty('--sx', Math.cos(angle) * radius + 'px');
+            heart.style.setProperty('--sy', Math.sin(angle) * radius + 'px');
+
+            // Add spiral animation
+            if (!document.querySelector('style[data-spiral]')) {
+                const style = document.createElement('style');
+                style.setAttribute('data-spiral', 'true');
+                style.textContent = `
+                    @keyframes spiral {
+                        0% {
+                            transform: translate(-50%, -50%) scale(0);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(calc(-50% + var(--sx)), calc(-50% + var(--sy))) scale(0.3);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }, i * 50);
+    }
+}
