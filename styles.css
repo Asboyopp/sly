@@ -806,8 +806,10 @@ body {
     }
 
     .pet-name {
-        font-size: 1rem;
-        padding: 0.3rem 0.6rem;
+        font-size: 0.9rem;
+        padding: 0.4rem 0.6rem;
+        max-width: 75vw;
+        line-height: 1.2;
     }
 
     .section-title {
