@@ -107,6 +107,11 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.3);
     margin-top: 0.5rem;
     font-size: 1.8rem;
+    word-wrap: break-word;
+    hyphens: auto;
+    max-width: 90vw;
+    text-align: center;
+    line-height: 1.4;
 }
 
 .subtitle {
