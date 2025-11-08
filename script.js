@@ -138,6 +138,13 @@ function initializeWebsite() {
     initFloatingMessages();
     initLoveButtonSurprises();
     checkCustomKissImage();
+    initHeartTrailEffect();
+    initFloatingHearts();
+    initRandomHeartExplosions();
+    initLoveMeter();
+    initSurpriseElements();
+    initInfiniteScrollLove();
+    initTouchGestures();
 }
 
 // Create floating hearts background
